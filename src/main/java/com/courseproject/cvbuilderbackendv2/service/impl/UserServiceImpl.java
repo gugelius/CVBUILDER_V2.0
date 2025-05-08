@@ -8,24 +8,23 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
-//    private static UserServiceImpl instance = new UserServiceImpl();
-//    public static UserServiceImpl getInstance() {
-//        return instance;
-//    }
-
-//    private UserServiceImpl(){
-//    }
     private final UserRepository userRepository;
     public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
     @Override
-    public boolean login(Map<String, String> params){
-        return (params.get("username").equals("admin") && params.get("password").equals("admin"));
+    public boolean authenticate(String userName, String userPassword){
+        User user = userRepository.findByUserName(userName);
+        if (user == null){
+            return false;
+        }
+        return userPassword.equals(user.getUserPassword());
     }
 
     @Override
-    public boolean register(Map<String,String> params){
-        return false;
+    public boolean register(String userName, String userPassword){
+        User newUser = new User(userName, userPassword);
+        userRepository.save(newUser);
+        return true;
     }
 }

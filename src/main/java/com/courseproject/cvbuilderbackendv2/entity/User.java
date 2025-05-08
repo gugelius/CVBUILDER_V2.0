@@ -3,14 +3,14 @@ package com.courseproject.cvbuilderbackendv2.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String userName;
 
     @Column(nullable = false)
@@ -19,8 +19,11 @@ public class User {
     @Column(unique = true, nullable = true)
     private String userEmail;
 
-    // Конструкторы
     public User() {}
+    public User(String userName, String userPassword) {
+        this.userName = userName;
+        this.userPassword = userPassword;
+    }
 
     public User(String userName, String userPassword, String userEmail) {
         this.userName = userName;
@@ -28,7 +31,6 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    // Геттеры и сеттеры
     public int getUserId() {
         return userId;
     }
@@ -59,5 +61,15 @@ public class User {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                '}';
     }
 }
