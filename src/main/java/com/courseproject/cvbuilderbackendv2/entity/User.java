@@ -16,7 +16,7 @@ public class User {
     @Column(nullable = false)
     private String userPassword;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = true)
     private String userEmail;
 
     // Конструкторы

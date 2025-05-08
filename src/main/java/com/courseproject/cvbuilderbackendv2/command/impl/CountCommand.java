@@ -1,10 +1,12 @@
 package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 import java.util.Map;
 
+@Component
 public class CountCommand implements Command {
     @Override
     public String execute(Map<String, String> params, Model model){
