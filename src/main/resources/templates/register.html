@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register page</title>
+</head>
+<body>
+<!--<form action="login_command" method="POST">-->
+<form action="REGISTER" method="POST">
+  <input type="text" name="username" placeholder="enter name"/>
+  <input type="password" name="password" placeholder="enter password"/>
+  <input value="PRESS ME" type="submit"/>
+</form>
+<p id="result" th:text="${result}"></p>
+<p id="err" th:text="${err}"></p>
+</body>
+</html>

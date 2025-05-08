@@ -13,7 +13,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/{command}")
 public class MainController {
-    private final CommandRegistry commandRegistry; //new code
+    private final CommandRegistry commandRegistry;
     @Autowired
     public MainController(CommandRegistry commandRegistry) { //new code
         this.commandRegistry = commandRegistry;
@@ -21,9 +21,12 @@ public class MainController {
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public String handleCommand(@PathVariable String command, @RequestParam Map<String, String> params, Model model) {
         try {
-//            Command cmd = CommandType.define(command);
-            Command cmd = commandRegistry.getCommand(command);
-            return cmd.execute(params, model);
+            if(command.contains(".html")){ //TODO для перехода на дргуие страницы
+                return command.replaceAll(".html","");
+            }else {
+                Command cmd = commandRegistry.getCommand(command);
+                return cmd.execute(params, model);
+            }
         } catch (IOException e) {
             model.addAttribute("err", "Ошибка ввода-вывода");
         } catch (UnsupportedOperationException e) {
