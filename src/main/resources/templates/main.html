@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Название в тайтле</title>
+</head>
+<body>
+<form action="count" method="POST">
+  <input type="number" name="input" placeholder="enter value"/>
+  <input value="PRESS ME" type="submit"/>
+</form>
+<p id="result" th:text="${result}"></p>
+<p id="err" th:text="${err}"></p>
+</body>
+</html>
