@@ -10,9 +10,7 @@ import java.util.Map;
 @Component
 public class RegisterCommand implements Command {
     private final UserService userService;
-    public RegisterCommand(UserService userService){
-        this.userService = userService;
-    }
+    public RegisterCommand(UserService userService){this.userService = userService;}
     @Override
     public String execute(Map<String, String> params, Model model){
         String userName = params.get("username");
@@ -20,7 +18,7 @@ public class RegisterCommand implements Command {
         if(userService.register(userName, userPassword)){
             return "main";
         } else{
-            model.addAttribute("err", "Incorrect login or pass");
+            model.addAttribute("err", "This name is already taken");
             return "register";
         }
     }

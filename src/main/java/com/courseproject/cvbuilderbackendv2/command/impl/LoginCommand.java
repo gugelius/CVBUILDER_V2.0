@@ -13,9 +13,7 @@ import java.util.Map;
 @Component
 public class LoginCommand implements Command {
     private final UserService userService;
-    public LoginCommand(UserService userService){
-        this.userService = userService;
-    }
+    public LoginCommand(UserService userService){this.userService = userService;}
     @Override
     public String execute(Map<String, String> params, Model model){
         String userName = params.get("username");
