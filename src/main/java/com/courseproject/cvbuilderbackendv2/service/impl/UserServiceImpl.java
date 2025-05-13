@@ -13,18 +13,18 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
     @Override
-    public boolean authenticate(String userName, String userPassword){
+    public boolean authenticate(String userName, String userPassword){//TODO Validation + Encryption + JWT (Utils)
         User user = userRepository.findByUserName(userName);
-        if (user == null){
-            return false;
-        }
-        return userPassword.equals(user.getUserPassword());
+        return (user == null) ? false : userPassword.equals(user.getUserPassword());
     }
 
     @Override
-    public boolean register(String userName, String userPassword){
-        User newUser = new User(userName, userPassword);
-        userRepository.save(newUser);
-        return true;
+    public boolean register(String userName, String userPassword){ //TODO Validation + Encryption + JWT (Utils)
+        if(userRepository.findByUserName(userName)!= null){
+            return false;
+        }else {
+            userRepository.save(new User(userName, userPassword));
+            return true;
+        }
     }
 }
