@@ -5,6 +5,6 @@ import java.util.Map;
 
 @FunctionalInterface
 public interface Command {
-    Map<String, Object> execute(Map<String, String> params) throws IOException;
+    Map<String, Object> execute(Map<String, Object> params) throws IOException;
     default void refresh() {}
 }

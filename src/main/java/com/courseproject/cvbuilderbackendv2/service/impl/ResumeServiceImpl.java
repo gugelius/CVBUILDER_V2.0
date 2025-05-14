@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
@@ -22,8 +23,8 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeRepository.findResumeByResumeId(resumeId);
     }
     @Override
-    public List<Resume> findResumeByUserId(int userId){
-        return resumeRepository.findResumeByUserId(userId);
+    public List<Resume> findResumesByUserId(int userId){
+        return resumeRepository.findResumesByUser_UserId(userId);
     }
 //    @Override
 //    public boolean save(Resume resume){
@@ -32,7 +33,7 @@ public class ResumeServiceImpl implements ResumeService {
 //    }
     @Override
     public boolean save(String userName, JsonNode resumeData){
-        resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData);
+        resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData));
         return true;
     }
 

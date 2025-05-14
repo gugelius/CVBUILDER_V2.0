@@ -16,9 +16,9 @@ public class RegisterCommand implements Command {
         this.jwtUtil = jwtUtil;
     }
     @Override
-    public Map<String, Object> execute(Map<String, String> params){
-        String userName = params.get("username");
-        String userPassword = params.get("pass");
+    public Map<String, Object> execute(Map<String, Object> params){
+        String userName = params.get("username").toString();
+        String userPassword = params.get("pass").toString();
         if(userService.register(userName, userPassword)){
             String token = jwtUtil.generateToken(userName);
             return Map.of("status", "success", "token", token);

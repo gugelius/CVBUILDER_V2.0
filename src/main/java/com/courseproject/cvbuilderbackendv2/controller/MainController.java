@@ -43,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -59,27 +60,34 @@ public class MainController {
     }
 
     @GetMapping
-    public ResponseEntity<?> handleGetCommand(@RequestParam Map<String, String> queryParams) {
+    public ResponseEntity<?> handleGetCommand(@RequestParam String command, @RequestHeader String Authorization) {
         try {
-            String command = queryParams.get("command");
+//            String command = (String) queryParams.get("command");
+            System.out.println(command);
+            System.out.println(Authorization);
+//            System.out.println(queryParams);
             if (command == null) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Команда не указана"));
             }
 
             Command cmd = commandRegistry.getCommand(command);
-            Map<String, Object> response = cmd.execute(queryParams);
+//            Map<String, Object> response = cmd.execute(queryParams);
+            Map<String,Object> response = cmd.execute(Map.of("command",command, "token", Authorization.substring(7)));
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(500).body(Map.of("error", "Ошибка ввода-вывода"));
         } catch (UnsupportedOperationException e) {
-            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + queryParams.get("command")));
+//            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + queryParams.get("command")));
+            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + command));
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> handlePostCommand(@RequestBody Map<String, String> requestData) {
+    public ResponseEntity<?> handlePostCommand(@RequestBody Map<String, Object> requestData) {
         try {
-            String command = requestData.get("command");
+            String command = requestData.get("command").toString();
+            System.out.println(command);
+            System.out.println(requestData);
             if (command == null) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Команда не указана"));
             }

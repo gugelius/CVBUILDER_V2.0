@@ -148,6 +148,8 @@ public class Resume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int resumeId;
 
+    //TODO userName instead of userId
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -162,7 +164,6 @@ public class Resume {
         this.user = user;
         this.resumeData = resumeData;
     }
-
     public int getResumeId() {
         return resumeId;
     }
@@ -177,6 +178,14 @@ public class Resume {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "resumeId=" + resumeId +
+                ", resumeData=" + resumeData +
+                '}';
     }
 
     public JsonNode getResumeData() {
