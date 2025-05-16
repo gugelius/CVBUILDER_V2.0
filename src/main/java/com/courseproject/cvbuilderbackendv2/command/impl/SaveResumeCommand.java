@@ -33,9 +33,7 @@ public class SaveResumeCommand implements Command {
         }
 
         String userName = authentication.getName();
-        System.out.println("Authenticated user: " + userName);
 
-        System.out.println(userName);
         JsonNode resumeData = objectMapper.valueToTree(params.get("resumeData"));
         resumeService.save(userName,resumeData);
         return Map.of("status", "success");

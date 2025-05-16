@@ -42,8 +42,6 @@ public class MainController {
     public ResponseEntity<?> handlePostCommand(@RequestBody Map<String, Object> requestData) {
         try {
             String command = requestData.get("command").toString();
-            System.out.println(command);
-            System.out.println(requestData);
             if (command == null) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Команда не указана"));
             }

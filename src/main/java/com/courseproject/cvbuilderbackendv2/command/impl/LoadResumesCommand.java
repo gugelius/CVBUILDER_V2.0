@@ -30,10 +30,8 @@ public class LoadResumesCommand implements Command {
         }
 
         String userName = authentication.getName();
-        System.out.println("Authenticated user: " + userName);
         int userId = userService.findUserId(userName);
         List<Resume> resumes = resumeService.findResumesByUserId(userId);
-        System.out.println(resumes);
         return Map.of("resumes", resumes);
     }
 }
