@@ -26,11 +26,8 @@ public class ResumeServiceImpl implements ResumeService {
     public List<Resume> findResumesByUserId(int userId){
         return resumeRepository.findResumesByUser_UserId(userId);
     }
-//    @Override
-//    public boolean save(Resume resume){
-//        resumeRepository.save(resume);
-//        return true;
-//    }
+
+    //TODO JSONNODE
     @Override
     public boolean save(String userName, JsonNode resumeData){
         resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData));

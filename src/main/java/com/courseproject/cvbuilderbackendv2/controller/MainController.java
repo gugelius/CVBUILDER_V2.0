@@ -47,6 +47,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -60,25 +61,27 @@ public class MainController {
     }
 
     @GetMapping
-    public ResponseEntity<?> handleGetCommand(@RequestParam String command, @RequestHeader String Authorization) {
+    public ResponseEntity<?> handleGetCommand(@RequestHeader String Authorization, @RequestParam Map<String, String> params) {
         try {
-//            String command = (String) queryParams.get("command");
-            System.out.println(command);
-            System.out.println(Authorization);
-//            System.out.println(queryParams);
+            //TODO Возможно убрать Authorization и всё-таки токен по-другому передавать, пора править секурити
+            System.out.println("Command = " + params.get("command"));
+            System.out.println("Parameters main controller = "+params);
+            System.out.println("Authorization header = "+Authorization);
+//            System.out.println("resumeId = "+resumeId);
+            String command = params.get("command");
             if (command == null) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Команда не указана"));
             }
 
             Command cmd = commandRegistry.getCommand(command);
-//            Map<String, Object> response = cmd.execute(queryParams);
-            Map<String,Object> response = cmd.execute(Map.of("command",command, "token", Authorization.substring(7)));
+            Map<String,Object> response = cmd.execute(new HashMap<>(params) {{
+                put("token", Authorization.substring(7));
+            }});
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             return ResponseEntity.status(500).body(Map.of("error", "Ошибка ввода-вывода"));
         } catch (UnsupportedOperationException e) {
-//            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + queryParams.get("command")));
-            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + command));
+            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + params.get("command")));
         }
     }
 
