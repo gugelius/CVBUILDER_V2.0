@@ -6,6 +6,7 @@ import com.courseproject.cvbuilderbackendv2.repository.UserRepository;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -35,11 +36,18 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    @Transactional
     public boolean deleteResumeByResumeId(int resumeId){
-        return true;
+        return (resumeRepository.deleteResumeByResumeId(resumeId)>0) ? true : false;
     }
     @Override
-    public boolean updateResume(Resume resume){
-        return true;
+    public boolean updateResume(int resumeId, JsonNode resumeData) {
+        return resumeRepository.findById(resumeId)
+                .map(resume -> {
+                    resume.setResumeData(resumeData); // Обновляем данные резюме
+                    resumeRepository.save(resume); // Hibernate поймет, что нужно сделать UPDATE
+                    return true;
+                })
+                .orElse(false); // Если резюме не найдено, возвращаем false
     }
 }

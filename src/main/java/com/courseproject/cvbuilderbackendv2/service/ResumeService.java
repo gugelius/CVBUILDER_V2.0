@@ -12,5 +12,5 @@ public interface ResumeService {
     //TODO JSONNODE
     boolean save(String userName, JsonNode resumeData);
     boolean deleteResumeByResumeId(int resumeId);
-    boolean updateResume(Resume resume);
+    boolean updateResume(int resumeId, JsonNode resumeData);
 }

@@ -33,7 +33,7 @@ public class LoadResumeCommand implements Command {
 
         // Добавляем ID, если он нужен
         resultMap.put("resumeId", resume.getResumeId());
-
+        System.out.println(resultMap);
         return resultMap;
     }
 }
