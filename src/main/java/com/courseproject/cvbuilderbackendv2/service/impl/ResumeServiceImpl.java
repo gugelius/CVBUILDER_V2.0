@@ -6,6 +6,7 @@ import com.courseproject.cvbuilderbackendv2.repository.UserRepository;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,11 +35,12 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public boolean deleteResumeByResumeId(int resumeId){
         return (resumeRepository.deleteResumeByResumeId(resumeId)>0) ? true : false;
     }
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public boolean updateResume(int resumeId, JsonNode resumeData) {
         return resumeRepository.findById(resumeId)
                 .map(resume -> {

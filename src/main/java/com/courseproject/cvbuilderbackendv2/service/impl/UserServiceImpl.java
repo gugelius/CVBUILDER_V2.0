@@ -5,6 +5,8 @@ import com.courseproject.cvbuilderbackendv2.repository.UserRepository;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean register(String userName, String userPassword){
         if(userRepository.findByUserName(userName)!= null){
             return false;
