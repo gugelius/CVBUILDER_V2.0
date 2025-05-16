@@ -6,6 +6,8 @@ import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -24,13 +26,15 @@ public class SaveResumeCommand implements Command {
     }
     @Override
     public Map<String, Object> execute(Map<String, Object> params) {
-        //todo validation
-        //todo вытягивай токен не из тела, придумай как
-        //todo настрой бля секурити и не только
-        System.out.println("Poluchennie dannie: " + params);
-        String token = params.get("token").toString();
-        System.out.println(token);
-        String userName = jwtUtil.extractUsername(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            return Map.of("error", "User is not authenticated");
+        }
+
+        String userName = authentication.getName();
+        System.out.println("Authenticated user: " + userName);
+
         System.out.println(userName);
         JsonNode resumeData = objectMapper.valueToTree(params.get("resumeData"));
         resumeService.save(userName,resumeData);

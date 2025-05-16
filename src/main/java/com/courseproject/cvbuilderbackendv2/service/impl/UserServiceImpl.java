@@ -3,27 +3,30 @@ package com.courseproject.cvbuilderbackendv2.service.impl;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.repository.UserRepository;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository){
+    private BCryptPasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
-    public boolean authenticate(String userName, String userPassword){//TODO Validation + Encryption + JWT (Utils)
+    public boolean authenticate(String userName, String userPassword){
         User user = userRepository.findByUserName(userName);
-        return (user == null) ? false : userPassword.equals(user.getUserPassword());
+        return (user == null) ? false : passwordEncoder.matches(userPassword, user.getUserPassword());
     }
 
     @Override
-    public boolean register(String userName, String userPassword){ //TODO Validation + Encryption + JWT (Utils)
+    public boolean register(String userName, String userPassword){
         if(userRepository.findByUserName(userName)!= null){
             return false;
         }else {
-            userRepository.save(new User(userName, userPassword));
+            String hashedPassword = passwordEncoder.encode(userPassword);
+            userRepository.save(new User(userName, hashedPassword));
             return true;
         }
     }

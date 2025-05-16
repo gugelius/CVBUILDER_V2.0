@@ -5,11 +5,11 @@ import com.courseproject.cvbuilderbackendv2.command.Command;
 import com.courseproject.cvbuilderbackendv2.entity.Resume;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class LoadResumesCommand implements Command {
@@ -23,15 +23,17 @@ public class LoadResumesCommand implements Command {
     }
     @Override
     public Map<String, Object> execute(Map<String, Object> params){
-        //TODO token validation?
-        //TODO token iz header-a)
-        String token = params.get("token").toString();
-        String userName = jwtUtil.extractUsername(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            return Map.of("error", "User is not authenticated");
+        }
+
+        String userName = authentication.getName();
+        System.out.println("Authenticated user: " + userName);
         int userId = userService.findUserId(userName);
         List<Resume> resumes = resumeService.findResumesByUserId(userId);
         System.out.println(resumes);
         return Map.of("resumes", resumes);
-//        return Map.copyOf(resumes.stream()
-//                .collect(Collectors.toMap(resume -> String.valueOf(resume.getResumeId()), resume -> resume)));
     }
 }

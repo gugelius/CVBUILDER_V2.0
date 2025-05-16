@@ -24,14 +24,6 @@ public class UpdateResumeCommand implements Command {
     }
     @Override
     public Map<String, Object> execute(Map<String, Object> params) {
-        //todo validation
-        //todo вытягивай токен не из тела, придумай как
-        //todo настрой бля секурити и не только
-        System.out.println("Poluchennie dannie: " + params);
-//        String token = params.get("token").toString();
-//        System.out.println(token);
-//        String userName = jwtUtil.extractUsername(token);
-//        System.out.println(userName);
         int resumeId = Integer.valueOf((String)params.get("resumeId"));
         JsonNode resumeData = objectMapper.valueToTree(params.get("resumeData"));
         resumeService.updateResume(resumeId,resumeData);
