@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
@@ -28,7 +27,6 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeRepository.findResumesByUser_UserId(userId);
     }
 
-    //TODO JSONNODE
     @Override
     public boolean save(String userName, JsonNode resumeData){
         resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData));
@@ -44,10 +42,10 @@ public class ResumeServiceImpl implements ResumeService {
     public boolean updateResume(int resumeId, JsonNode resumeData) {
         return resumeRepository.findById(resumeId)
                 .map(resume -> {
-                    resume.setResumeData(resumeData); // Обновляем данные резюме
-                    resumeRepository.save(resume); // Hibernate поймет, что нужно сделать UPDATE
+                    resume.setResumeData(resumeData);
+                    resumeRepository.save(resume);
                     return true;
                 })
-                .orElse(false); // Если резюме не найдено, возвращаем false
+                .orElse(false);
     }
 }

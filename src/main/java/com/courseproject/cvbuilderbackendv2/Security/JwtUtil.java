@@ -5,12 +5,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
     private static final String SECRET_KEY = "0JrRg9GA0YHQvtCy0LDRj9GA0LDQsdC+0YLQsNGC0YDQtdGC0YzQtdCz0L7QutGD0YDRgdCw";
 

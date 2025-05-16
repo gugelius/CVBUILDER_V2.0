@@ -9,7 +9,6 @@ import java.util.Map;
 public interface ResumeService {
     Resume findResumeByResumeId(int resumeId);
     List<Resume> findResumesByUserId(int userId);
-    //TODO JSONNODE
     boolean save(String userName, JsonNode resumeData);
     boolean deleteResumeByResumeId(int resumeId);
     boolean updateResume(int resumeId, JsonNode resumeData);
