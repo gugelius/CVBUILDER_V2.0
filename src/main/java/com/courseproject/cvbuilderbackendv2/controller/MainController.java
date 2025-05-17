@@ -14,6 +14,12 @@ import java.util.Map;
 @RequestMapping("/api/controller")
 public class MainController {
     private final CommandRegistry commandRegistry;
+    private static final String ERROR = "error";
+    private static final String COMMAND = "command";
+    private static final String COMMAND_UNDEFINED = "Команда не указана";
+    private static final String UNKNOWN_COMMAND = "Неизвестная команда: ";
+    private static final String IO_ERROR = "Ошибка ввода-вывода";
+
 
     @Autowired
     public MainController(CommandRegistry commandRegistry) {
@@ -21,40 +27,39 @@ public class MainController {
     }
 
     @GetMapping
-    public ResponseEntity<?> handleGetCommand(@RequestParam Map<String, String> params) {
+    public ResponseEntity<Map<String, Object>> handleGetCommand(@RequestParam Map<String, String> params) {
         try {
-            String command = params.get("command");
+            String command = params.get(COMMAND);
             if (command == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Команда не указана"));
+                return ResponseEntity.badRequest().body(Map.of(ERROR, COMMAND_UNDEFINED));
             }
 
             Command cmd = commandRegistry.getCommand(command);
             Map<String,Object> response = cmd.execute(new HashMap<>(params));
             return ResponseEntity.ok(response);
         } catch (IOException e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Ошибка ввода-вывода"));
+            return ResponseEntity.status(500).body(Map.of(ERROR, IO_ERROR));
         } catch (UnsupportedOperationException e) {
-            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + params.get("command")));
+            return ResponseEntity.status(400).body(Map.of(ERROR, UNKNOWN_COMMAND + params.get(COMMAND)));
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> handlePostCommand(@RequestBody Map<String, Object> requestData) {
+    public ResponseEntity<Map<String, Object>> handlePostCommand(@RequestBody Map<String, Object> requestData) {
         try {
-            String command = requestData.get("command").toString();
-            System.out.println(command);
-            System.out.println(requestData);
+            String command = requestData.get(COMMAND).toString();
+
             if (command == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Команда не указана"));
+                return ResponseEntity.badRequest().body(Map.of(ERROR, COMMAND_UNDEFINED));
             }
 
             Command cmd = commandRegistry.getCommand(command);
             Map<String, Object> response = cmd.execute(requestData);
             return ResponseEntity.ok(response);
         } catch (IOException e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Ошибка ввода-вывода"));
+            return ResponseEntity.status(500).body(Map.of(ERROR, IO_ERROR));
         } catch (UnsupportedOperationException e) {
-            return ResponseEntity.status(400).body(Map.of("error", "Неизвестная команда: " + requestData.get("command")));
+            return ResponseEntity.status(400).body(Map.of(ERROR, UNKNOWN_COMMAND + requestData.get(COMMAND)));
         }
     }
 }

@@ -12,10 +12,11 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET_KEY = "0JrRg9GA0YHQvtCy0LDRj9GA0LDQsdC+0YLQsNGC0YDQtdGC0YzQtdCz0L7QutGD0YDRgdCw";
+    private JwtUtil(){};
+    private static final String KEY = "0JrRg9GA0YHQvtCy0LDRj9GA0LDQsdC+0YLQsNGC0YDQtdGC0YzQtdCz0L7QutGD0YDRgdCw";
 
     private static Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

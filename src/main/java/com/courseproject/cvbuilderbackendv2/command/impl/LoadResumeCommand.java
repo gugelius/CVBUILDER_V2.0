@@ -25,7 +25,6 @@ public class LoadResumeCommand implements Command {
         Map<String, Object> resultMap = objectMapper.convertValue(resume.getResumeData(), Map.class);
 
         resultMap.put("resumeId", resume.getResumeId());
-        System.out.println(resultMap);
         return resultMap;
     }
 }

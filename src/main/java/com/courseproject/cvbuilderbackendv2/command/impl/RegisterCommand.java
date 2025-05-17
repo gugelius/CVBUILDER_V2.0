@@ -10,17 +10,15 @@ import java.util.Map;
 @Component
 public class RegisterCommand implements Command {
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-    public RegisterCommand(UserService userService, JwtUtil jwtUtil){
+    public RegisterCommand(UserService userService){
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
     @Override
     public Map<String, Object> execute(Map<String, Object> params){
         String userName = params.get("username").toString();
         String userPassword = params.get("pass").toString();
         if(userService.register(userName, userPassword)){
-            String token = jwtUtil.generateToken(userName);
+            String token = JwtUtil.generateToken(userName);
             return Map.of("status", "success", "token", token);
         } else{
             return Map.of("status", "error","message", "Incorrect login or password");
