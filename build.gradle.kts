@@ -26,11 +26,18 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt:0.12.6")
 	implementation("org.springframework.security:spring-security-crypto")
 	runtimeOnly("org.postgresql:postgresql")
+	testImplementation("org.mockito:mockito-core:5.3.1")
+	testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-//	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation ("org.junit.jupiter:junit-jupiter:5.9.0")
+	testImplementation ("org.mockito:mockito-core:5.3.1")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named("check") {
+	dependsOn("test")
 }
