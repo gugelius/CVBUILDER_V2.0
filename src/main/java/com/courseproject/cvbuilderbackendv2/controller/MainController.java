@@ -48,7 +48,6 @@ public class MainController {
     public ResponseEntity<Map<String, Object>> handlePostCommand(@RequestBody Map<String, Object> requestData) {
         try {
             String command = requestData.get(COMMAND).toString();
-
             if (command == null) {
                 return ResponseEntity.badRequest().body(Map.of(ERROR, COMMAND_UNDEFINED));
             }
