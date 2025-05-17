@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
 public class CommandRegistry {
-    private final static String cmd = "COMMAND";
+    private static final String CMD = "COMMAND";
     private final Map<String, Command> commandMap;
 
     @Autowired
@@ -22,7 +22,7 @@ public class CommandRegistry {
     }
 
     public Command getCommand(String commandStr) {
-        Command command = commandMap.get(commandStr.toUpperCase()+cmd);
+        Command command = commandMap.get(commandStr.toUpperCase()+CMD);
         if (command == null) {
             throw new UnsupportedOperationException("Unknown command: " + commandStr);
         }

@@ -10,11 +10,9 @@ import java.util.Map;
 @Component
 public class LoginCommand implements Command {
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    public LoginCommand(UserService userService, JwtUtil jwtUtil) {
+    public LoginCommand(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -23,7 +21,7 @@ public class LoginCommand implements Command {
         String userPassword = params.get("pass").toString();
 
         if (userService.authenticate(userName, userPassword)) {
-            String token = jwtUtil.generateToken(userName);
+            String token = JwtUtil.generateToken(userName);
             return Map.of("status", "success", "token", token);
         } else {
             return Map.of("status", "error", "message", "Incorrect login or password");

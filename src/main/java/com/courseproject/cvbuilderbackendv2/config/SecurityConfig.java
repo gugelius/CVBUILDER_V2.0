@@ -1,7 +1,6 @@
 package com.courseproject.cvbuilderbackendv2.config;
 
 import com.courseproject.cvbuilderbackendv2.Security.JwtAuthenticationFilter;
-import com.courseproject.cvbuilderbackendv2.Security.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,11 +26,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public JwtUtil jwtUtil() {
-        return new JwtUtil();
     }
 
     @Bean

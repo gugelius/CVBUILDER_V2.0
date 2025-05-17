@@ -23,9 +23,6 @@ class ResumeServiceImplTest {
     @Mock
     private ResumeRepository resumeRepository;
 
-    @Mock
-    private UserRepository userRepository;
-
     @InjectMocks
     private ResumeServiceImpl resumeService;
 
@@ -62,7 +59,7 @@ class ResumeServiceImplTest {
     @Test
     void givenValidResumeId_whenDeleteResumeByResumeId_thenReturnTrue() {
         int resumeId = 1;
-        when(resumeRepository.deleteResumeByResumeId(resumeId)).thenReturn(1); // Симулируем успешное удаление (возвращает количество удалённых записей)
+        when(resumeRepository.deleteResumeByResumeId(resumeId)).thenReturn(1);
 
         boolean result = resumeService.deleteResumeByResumeId(resumeId);
 
@@ -73,7 +70,7 @@ class ResumeServiceImplTest {
     @Test
     void givenInvalidResumeId_whenDeleteResumeByResumeId_thenReturnFalse() {
         int resumeId = 999;
-        when(resumeRepository.deleteResumeByResumeId(resumeId)).thenReturn(0); // Симулируем отсутствие удалённых записей
+        when(resumeRepository.deleteResumeByResumeId(resumeId)).thenReturn(0);
 
         boolean result = resumeService.deleteResumeByResumeId(resumeId);
 

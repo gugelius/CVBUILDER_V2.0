@@ -51,7 +51,7 @@ class UserServiceImplTest {
         mockUser.setUserPassword(hashedPassword);
 
         when(userRepository.findByUserName(username)).thenReturn(mockUser);
-        when(passwordEncoder.matches(password, hashedPassword)).thenReturn(true); // Симулируем правильный пароль
+        when(passwordEncoder.matches(password, hashedPassword)).thenReturn(true);
 
         boolean result = userService.authenticate(username, password);
 
@@ -71,7 +71,7 @@ class UserServiceImplTest {
         mockUser.setUserPassword(hashedPassword);
 
         when(userRepository.findByUserName(username)).thenReturn(mockUser);
-        when(passwordEncoder.matches(wrongPassword, hashedPassword)).thenReturn(false); // Симулируем неверный пароль
+        when(passwordEncoder.matches(wrongPassword, hashedPassword)).thenReturn(false);
 
         boolean result = userService.authenticate(username, wrongPassword);
 
@@ -83,13 +83,13 @@ class UserServiceImplTest {
     @Test
     void givenNonExistentUser_whenAuthenticate_thenReturnFalse() {
         String username = "nonExistentUser";
-        when(userRepository.findByUserName(username)).thenReturn(null); // Симулируем отсутствие пользователя
+        when(userRepository.findByUserName(username)).thenReturn(null);
 
         boolean result = userService.authenticate(username, "anyPassword");
 
         assertFalse(result);
         verify(userRepository, times(1)).findByUserName(username);
-        verify(passwordEncoder, times(0)).matches(anyString(), anyString()); // Пароль не проверяется, если пользователя нет
+        verify(passwordEncoder, times(0)).matches(anyString(), anyString());
     }
 
 }

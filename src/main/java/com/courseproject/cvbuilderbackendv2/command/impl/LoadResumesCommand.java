@@ -5,8 +5,6 @@ import com.courseproject.cvbuilderbackendv2.command.Command;
 import com.courseproject.cvbuilderbackendv2.entity.Resume;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +14,7 @@ public class LoadResumesCommand implements Command {
     private final ResumeService resumeService;
     private final UserService userService;
     protected JwtUtil jwtUtil;
+    private static final String ERROR = "error";
     public LoadResumesCommand(ResumeService resumeService, UserService userService, JwtUtil jwtUtil){
         this.resumeService = resumeService;
         this.userService = userService;
@@ -23,13 +22,10 @@ public class LoadResumesCommand implements Command {
     }
     @Override
     public Map<String, Object> execute(Map<String, Object> params){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            return Map.of("error", "User is not authenticated");
+        String userName = userService.extractUserName();
+        if (userName.equals(ERROR)){
+            return Map.of(ERROR,ERROR);
         }
-
-        String userName = authentication.getName();
         int userId = userService.findUserId(userName);
         List<Resume> resumes = resumeService.findResumesByUserId(userId);
         return Map.of("resumes", resumes);
