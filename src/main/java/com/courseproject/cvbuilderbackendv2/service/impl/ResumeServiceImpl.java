@@ -5,11 +5,15 @@ import com.courseproject.cvbuilderbackendv2.repository.ResumeRepository;
 import com.courseproject.cvbuilderbackendv2.repository.UserRepository;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
@@ -25,21 +29,25 @@ public class ResumeServiceImpl implements ResumeService {
     }
     @Override
     public List<Resume> findResumesByUserId(int userId){
-        return resumeRepository.findResumesByUser_UserId(userId);
+        return CompletableFuture.supplyAsync(() -> resumeRepository.findResumesByUser_UserId(userId))
+                .join();
     }
 
+    @Async
     @Override
-    public boolean save(String userName, JsonNode resumeData){
+    public CompletableFuture<Boolean> save(String userName, JsonNode resumeData){
         resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData));
-        return true;
+        return CompletableFuture.completedFuture(true);
     }
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public boolean deleteResumeByResumeId(int resumeId){
-        return (resumeRepository.deleteResumeByResumeId(resumeId)>0) ? true : false;
+        return (resumeRepository.deleteResumeByResumeId(resumeId)>0);
     }
+  
     @Override
+    @Lock(LockModeType.OPTIMISTIC)
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public boolean updateResume(int resumeId, JsonNode resumeData) {
         return resumeRepository.findById(resumeId)

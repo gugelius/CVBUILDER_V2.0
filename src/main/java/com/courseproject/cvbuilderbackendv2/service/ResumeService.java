@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public interface ResumeService {
     Resume findResumeByResumeId(int resumeId);
     List<Resume> findResumesByUserId(int userId);
-    boolean save(String userName, JsonNode resumeData);
+    CompletableFuture<Boolean> save(String userName, JsonNode resumeData);
     boolean deleteResumeByResumeId(int resumeId);
     boolean updateResume(int resumeId, JsonNode resumeData);
 }

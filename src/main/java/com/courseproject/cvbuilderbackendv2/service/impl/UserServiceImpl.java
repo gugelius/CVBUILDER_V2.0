@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private static final String ERROR = "error";
     private static final String ANON = "anonymousUser";
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean authenticate(String userName, String userPassword){
         User user = userRepository.findByUserName(userName);
-        return (user == null) ? false : passwordEncoder.matches(userPassword, user.getUserPassword());
+        return user != null && passwordEncoder.matches(userPassword, user.getUserPassword());
     }
 
     @Override
