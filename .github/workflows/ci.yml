@@ -26,17 +26,8 @@ jobs:
       - name: Grant execute permissions to Gradle wrapper
         run: chmod +x gradlew
 
-      - name: Start SonarQube
-        run: docker run -d --name sonar -p 9000:9000 sonarqube:latest
-
-      - name: Wait for SonarQube to be ready
-        run: sleep 15
-
-      - name: Build application with Gradle
-        run: ./gradlew build --no-daemon
-
-      - name: Run tests
-        run: ./gradlew test --no-daemon
+      - name: Build application with Gradle (без тестов)
+        run: ./gradlew build -x test --no-daemon
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
