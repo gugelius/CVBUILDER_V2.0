@@ -45,8 +45,9 @@ public class ResumeServiceImpl implements ResumeService {
     public boolean deleteResumeByResumeId(int resumeId){
         return (resumeRepository.deleteResumeByResumeId(resumeId)>0);
     }
+  
     @Override
-    @Transactional (isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public boolean updateResume(int resumeId, JsonNode resumeData) {
         return resumeRepository.findById(resumeId)
                 .map(resume -> {
