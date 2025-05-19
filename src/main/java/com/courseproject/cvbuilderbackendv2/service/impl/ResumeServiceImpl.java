@@ -47,7 +47,6 @@ public class ResumeServiceImpl implements ResumeService {
     }
   
     @Override
-    @Lock(LockModeType.OPTIMISTIC)
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public boolean updateResume(int resumeId, JsonNode resumeData) {
         return resumeRepository.findById(resumeId)
