@@ -26,6 +26,12 @@ jobs:
       - name: Grant execute permissions to Gradle wrapper
         run: chmod +x gradlew
 
+      - name: Start SonarQube
+        run: docker run -d --name sonar -p 9000:9000 sonarqube:latest
+
+      - name: Wait for SonarQube to be ready
+        run: sleep 15
+
       - name: Build application with Gradle
         run: ./gradlew build --no-daemon
 
@@ -56,6 +62,9 @@ jobs:
 
       - name: Run Docker Compose
         run: docker-compose up -d
+
+      - name: Wait for Database to be Ready
+        run: sleep 10
 
       - name: List Running Containers (Debug)
         run: docker ps -a
