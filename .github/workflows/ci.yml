@@ -29,7 +29,7 @@ jobs:
       - name: Run SonarQube analysis
         env:
           SONAR_TOKEN: ${{ secrets.squ_23b566e40ebda7361299995200dc6725594d3e2e }}
-        run: ./gradlew sonarqube -Dsonar.host.url=http://localhost:9000
+        run: ./gradlew sonar -Dsonar.host.url=http://localhost:9000
 
       - name: Build application with Gradle
         run: ./gradlew build --no-daemon
