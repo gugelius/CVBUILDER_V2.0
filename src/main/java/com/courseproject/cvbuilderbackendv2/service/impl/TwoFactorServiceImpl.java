@@ -1,6 +1,7 @@
 package com.courseproject.cvbuilderbackendv2.service.impl;
 
 import com.courseproject.cvbuilderbackendv2.entity.User;
+import com.courseproject.cvbuilderbackendv2.service.TwoFactorService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +12,7 @@ import java.time.ZoneOffset;
 import java.util.Random;
 
 @Service
-public class TwoFactorService {
+public class TwoFactorServiceImpl implements TwoFactorService {
 
     private static final int CODE_LENGTH = 6;
     private static final int CODE_EXPIRY_MINUTES = 5;
@@ -24,10 +25,11 @@ public class TwoFactorService {
     @Value("${app.email.enabled:true}")
     private boolean emailEnabled;
 
-    public TwoFactorService(JavaMailSender mailSender) {
+    public TwoFactorServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
+    @Override
     public String generateCode() {
         Random random = new Random();
         StringBuilder code = new StringBuilder();
@@ -37,6 +39,7 @@ public class TwoFactorService {
         return code.toString();
     }
 
+    @Override
     public void sendTwoFactorCode(String email, String code) {
         if (emailEnabled && email != null) {
             try {
@@ -55,6 +58,7 @@ public class TwoFactorService {
         System.out.println("=== 2FA CODE FOR " + email + ": " + code + " ===");
     }
 
+    @Override
     public boolean validateCode(User user, String code) {
         if (user == null || code == null) return false;
         if (user.getTwoFactorCode() == null || user.getTwoFactorCodeExpiry() == null) return false;
@@ -63,6 +67,7 @@ public class TwoFactorService {
                 OffsetDateTime.now(ZoneOffset.UTC).isBefore(user.getTwoFactorCodeExpiry());
     }
 
+    @Override
     public OffsetDateTime calculateExpiryTime() {
         return OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(CODE_EXPIRY_MINUTES);
     }

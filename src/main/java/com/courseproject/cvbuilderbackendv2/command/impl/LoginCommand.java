@@ -3,7 +3,7 @@ package com.courseproject.cvbuilderbackendv2.command.impl;
 import com.courseproject.cvbuilderbackendv2.Security.JwtUtil;
 import com.courseproject.cvbuilderbackendv2.command.Command;
 import com.courseproject.cvbuilderbackendv2.entity.User;
-import com.courseproject.cvbuilderbackendv2.service.impl.TwoFactorService;
+import com.courseproject.cvbuilderbackendv2.service.TwoFactorService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
 import org.springframework.stereotype.Component;
 
