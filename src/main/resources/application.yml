@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: CVBUILDERBACKENDV2
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/CVBUILDER
+    username: postgres
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: brandov.ru@gmail.com
+    password: ikaj jlgh adow yexx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

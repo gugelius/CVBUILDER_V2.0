@@ -10,7 +10,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(22)
+		languageVersion = JavaLanguageVersion.of(23)
 	}
 }
 
@@ -26,6 +26,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("io.jsonwebtoken:jjwt:0.12.6")
 	implementation("org.springframework.security:spring-security-crypto")
+
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+
+//	implementation("com.google.api-client:google-api-client:2.2.0")
+//	implementation("com.google.http-client:google-http-client-jackson2:1.43.3")
+
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.mockito:mockito-core:5.3.1")
 	testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
