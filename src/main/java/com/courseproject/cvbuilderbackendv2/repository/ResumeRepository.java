@@ -12,4 +12,5 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
     List<Resume> findResumesByUser_UserId(int userId);
     Resume save(Resume resume);
     int deleteResumeByResumeId(int resumeId);
+    List<Resume> findByIsPublicTrue();
 }

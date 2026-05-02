@@ -58,6 +58,11 @@ public class LoginCommand implements Command {
 
         String token = JwtUtil.generateToken(userName);
 
-        return Map.of("status", "success", "token", token);
+        return Map.of(
+                "status", "success",
+                "token", token,
+                "role", user.getRole().name(),
+                "username", user.getUserName()
+        );
     }
 }

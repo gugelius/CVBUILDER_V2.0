@@ -29,6 +29,10 @@ public class User {
     @Column(nullable = false)
     private boolean twoFactorEnabled = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.ROLE_SEEKER;
+
     public User() {}
 
     public User(String userName, String userPassword) {
@@ -63,13 +67,15 @@ public class User {
     public boolean isTwoFactorEnabled() { return twoFactorEnabled; }
     public void setTwoFactorEnabled(boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
 
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
+
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", twoFactorEnabled=" + twoFactorEnabled +
+                ", role=" + role +
                 '}';
     }
 }

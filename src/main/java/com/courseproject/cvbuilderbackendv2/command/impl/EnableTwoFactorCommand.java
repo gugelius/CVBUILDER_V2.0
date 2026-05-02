@@ -18,6 +18,7 @@ public class EnableTwoFactorCommand implements Command {
 
     @Override
     public Map<String, Object> execute(Map<String, Object> params) {
+        boolean enabled = Boolean.parseBoolean(params.get("enabled").toString());
         String userName = userService.extractUserName();
 
         if ("error".equals(userName)) {
@@ -34,9 +35,9 @@ public class EnableTwoFactorCommand implements Command {
             return Map.of("status", "error", "message", "Email is required for 2FA");
         }
 
-        user.setTwoFactorEnabled(true);
+        user.setTwoFactorEnabled(enabled);
         userService.saveUser(user);
 
-        return Map.of("status", "success", "message", "Two-factor authentication enabled");
+        return Map.of("status", "success", "message", "Two-factor authentication status changed");
     }
 }
