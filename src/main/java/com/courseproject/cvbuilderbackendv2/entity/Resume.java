@@ -20,16 +20,19 @@ public class Resume {
     @Column(columnDefinition = "jsonb")
     private JsonNode resumeData;
 
+    @Column(nullable = false)
+    private boolean isPublic = false;
+
     public Resume(){}
 
-    public Resume(User user, JsonNode resumeData) {
+    public Resume(User user, JsonNode resumeData, boolean isPublic) {
         this.user = user;
         this.resumeData = resumeData;
+        this.isPublic = isPublic;
     }
     public int getResumeId() {
         return resumeId;
     }
-
     public void setResumeId(int resumeId) {
         this.resumeId = resumeId;
     }
@@ -37,10 +40,13 @@ public class Resume {
     public User getUser() {
         return user;
     }
+    public void setUser(User user) { this.user = user; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public boolean isPublic() { return isPublic; }
+    public void setPublic(boolean isPublic) { this.isPublic = isPublic; }
+
+    public JsonNode getResumeData() { return resumeData; }
+    public void setResumeData(JsonNode resumeData) { this.resumeData = resumeData; }
 
     @Override
     public String toString() {
@@ -49,14 +55,4 @@ public class Resume {
                 ", resumeData=" + resumeData +
                 '}';
     }
-
-    public JsonNode getResumeData() {
-        return resumeData;
-    }
-
-    public void setResumeData(JsonNode resumeData) {
-        this.resumeData = resumeData;
-    }
-
 }
-

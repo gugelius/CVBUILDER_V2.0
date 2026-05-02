@@ -35,8 +35,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Async
     @Override
-    public CompletableFuture<Boolean> save(String userName, JsonNode resumeData){
-        resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData));
+    public CompletableFuture<Boolean> save(String userName, JsonNode resumeData, boolean isPublic){
+        resumeRepository.save(new Resume(userRepository.findByUserName(userName), resumeData, isPublic));
         return CompletableFuture.completedFuture(true);
     }
 
@@ -48,10 +48,11 @@ public class ResumeServiceImpl implements ResumeService {
   
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public boolean updateResume(int resumeId, JsonNode resumeData) {
+    public boolean updateResume(int resumeId, JsonNode resumeData, boolean isPublic) {
         return resumeRepository.findById(resumeId)
                 .map(resume -> {
                     resume.setResumeData(resumeData);
+                    resume.setPublic(isPublic);
                     resumeRepository.save(resume);
                     return true;
                 })

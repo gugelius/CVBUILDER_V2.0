@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public interface ResumeService {
     Resume findResumeByResumeId(int resumeId);
     List<Resume> findResumesByUserId(int userId);
-    CompletableFuture<Boolean> save(String userName, JsonNode resumeData);
+    CompletableFuture<Boolean> save(String userName, JsonNode resumeData, boolean isPublic);
     boolean deleteResumeByResumeId(int resumeId);
-    boolean updateResume(int resumeId, JsonNode resumeData);
+    boolean updateResume(int resumeId, JsonNode resumeData, boolean isPublic);
 }

@@ -1,5 +1,6 @@
 package com.courseproject.cvbuilderbackendv2.service.impl;
 
+import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.repository.UserRepository;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
@@ -81,5 +82,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByUserEmail(email);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public boolean register(String userName, String userPassword, String userEmail, Role role) {
+        if(userRepository.findByUserName(userName) != null){
+            return false;
+        }
+
+        if(userEmail != null && !userEmail.isEmpty() && userRepository.findByUserEmail(userEmail) != null) {
+            return false;
+        }
+
+        String hashedPassword = passwordEncoder.encode(userPassword);
+        User user = new User(userName, hashedPassword, userEmail);
+        user.setRole(role != null ? role : Role.ROLE_SEEKER);
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public Role getUserRole(String userName) {
+        User user = userRepository.findByUserName(userName);
+        return user != null ? user.getRole() : null;
     }
 }
