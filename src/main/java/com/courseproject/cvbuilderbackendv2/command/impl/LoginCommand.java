@@ -2,6 +2,7 @@ package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.Security.JwtUtil;
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import com.courseproject.cvbuilderbackendv2.dto.UserDTO;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.service.TwoFactorService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
@@ -58,11 +59,18 @@ public class LoginCommand implements Command {
 
         String token = JwtUtil.generateToken(userName);
 
+        UserDTO userDTO = new UserDTO(
+                user.getUserId(),
+                user.getUserName(),
+                user.getUserEmail(),
+                user.getRole(),
+                user.isTwoFactorEnabled()
+        );
+
         return Map.of(
                 "status", "success",
                 "token", token,
-                "role", user.getRole().name(),
-                "username", user.getUserName()
+                "user", userDTO
         );
     }
 }

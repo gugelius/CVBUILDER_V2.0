@@ -2,6 +2,7 @@ package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.Security.JwtUtil;
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import com.courseproject.cvbuilderbackendv2.dto.UserDTO;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.service.TwoFactorService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
@@ -94,19 +95,21 @@ public class UpdateProfileCommand implements Command {
         }
 
         userService.saveUser(user);
-
         String token = JwtUtil.generateToken(userName);
+
+        UserDTO userDTO = new UserDTO(
+                user.getUserId(),
+                user.getUserName(),
+                user.getUserEmail(),
+                user.getRole(),
+                user.isTwoFactorEnabled()
+        );
 
         return Map.of(
                 "status", "success",
                 "message", "Profile updated",
                 "token", token,
-                "user", Map.of(
-                        "username", user.getUserName(),
-                        "email", user.getUserEmail() != null ? user.getUserEmail() : "",
-                        "role", user.getRole().name(),
-                        "twoFactorEnabled", user.isTwoFactorEnabled()
-                )
+                "user", userDTO
         );
     }
 }

@@ -1,12 +1,12 @@
 package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import com.courseproject.cvbuilderbackendv2.dto.ResumeDTO;
 import com.courseproject.cvbuilderbackendv2.entity.Resume;
 import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -48,11 +48,14 @@ public class LoadResumeCommand implements Command {
             }
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> resultMap = objectMapper.convertValue(resume.getResumeData(), Map.class);
-        resultMap.put("resumeId", resume.getResumeId());
-        resultMap.put("isPublic", resume.isPublic());
+        ResumeDTO resumeDTO = new ResumeDTO(
+                resume.getResumeId(),
+                resume.getUser().getUserId(),
+                resume.getUser().getUserName(),
+                resume.getResumeData(),
+                resume.isPublic()
+        );
 
-        return resultMap;
+        return Map.of("status", "success", "resume", resumeDTO);
     }
 }
