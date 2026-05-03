@@ -1,6 +1,7 @@
 package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import com.courseproject.cvbuilderbackendv2.dto.ResumeDTO;
 import com.courseproject.cvbuilderbackendv2.entity.Resume;
 import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
@@ -35,6 +36,15 @@ public class LoadPublicResumesCommand implements Command {
             return Map.of("status", "error", "message", "Access denied");
         }
 
-        return Map.of("status", "success", "resumes", publicResumes);
+        List<ResumeDTO> resumeDTOs = publicResumes.stream()
+                .map(r -> new ResumeDTO(
+                        r.getResumeId(),
+                        r.getUser().getUserId(),
+                        r.getUser().getUserName(),
+                        r.getResumeData(),
+                        r.isPublic()))
+                .toList();
+
+        return Map.of("status", "success", "resumes", resumeDTOs);
     }
 }

@@ -4,7 +4,7 @@ import com.courseproject.cvbuilderbackendv2.command.Command;
 import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.entity.Vacancy;
-import com.courseproject.cvbuilderbackendv2.repository.VacancyRepository;
+import com.courseproject.cvbuilderbackendv2.service.VacancyService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +13,11 @@ import java.util.Map;
 @Component
 public class UpdateVacancyCommand implements Command {
 
-    private final VacancyRepository vacancyRepository;
+    private final VacancyService vacancyService;
     private final UserService userService;
 
-    public UpdateVacancyCommand(VacancyRepository vacancyRepository, UserService userService) {
-        this.vacancyRepository = vacancyRepository;
+    public UpdateVacancyCommand(VacancyService vacancyService, UserService userService) {
+        this.vacancyService = vacancyService;
         this.userService = userService;
     }
 
@@ -34,7 +34,7 @@ public class UpdateVacancyCommand implements Command {
         }
 
         Long vacancyId = Long.parseLong(params.get("vacancyId").toString());
-        Vacancy vacancy = vacancyRepository.findById(vacancyId).orElse(null);
+        Vacancy vacancy = vacancyService.findVacancyByVacancyId(vacancyId);
 
         if (vacancy == null) {
             return Map.of("status", "error", "message", "Vacancy not found");
@@ -44,12 +44,12 @@ public class UpdateVacancyCommand implements Command {
             return Map.of("status", "error", "message", "You can only update your own vacancies");
         }
 
-        if (params.containsKey("title")) vacancy.setTitle((String) params.get("title"));
-        if (params.containsKey("description")) vacancy.setDescription((String) params.get("description"));
-        if (params.containsKey("requirements")) vacancy.setRequirements((String) params.get("requirements"));
-        if (params.containsKey("companyName")) vacancy.setCompanyName((String) params.get("companyName"));
+        String title = params.containsKey("title") ? (String) params.get("title") : null;
+        String description = params.containsKey("description") ? (String) params.get("description") : null;
+        String requirements = params.containsKey("requirements") ? (String) params.get("requirements") : null;
+        String companyName = params.containsKey("companyName") ? (String) params.get("companyName") : null;
 
-        vacancyRepository.save(vacancy);
+        vacancyService.updateVacancy(vacancyId, title, description, requirements, companyName);
         return Map.of("status", "success");
     }
 }

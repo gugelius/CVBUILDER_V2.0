@@ -4,8 +4,8 @@ import com.courseproject.cvbuilderbackendv2.command.Command;
 import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
 import com.courseproject.cvbuilderbackendv2.entity.Vacancy;
-import com.courseproject.cvbuilderbackendv2.repository.VacancyRepository;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
+import com.courseproject.cvbuilderbackendv2.service.VacancyService;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -13,11 +13,11 @@ import java.util.Map;
 @Component
 public class DeleteVacancyCommand implements Command {
 
-    private final VacancyRepository vacancyRepository;
+    private final VacancyService vacancyService;
     private final UserService userService;
 
-    public DeleteVacancyCommand(VacancyRepository vacancyRepository, UserService userService) {
-        this.vacancyRepository = vacancyRepository;
+    public DeleteVacancyCommand(VacancyService vacancyService, UserService userService) {
+        this.vacancyService = vacancyService;
         this.userService = userService;
     }
 
@@ -34,7 +34,7 @@ public class DeleteVacancyCommand implements Command {
         }
 
         Long vacancyId = Long.parseLong(params.get("vacancyId").toString());
-        Vacancy vacancy = vacancyRepository.findById(vacancyId).orElse(null);
+        Vacancy vacancy = vacancyService.findVacancyByVacancyId(vacancyId);
 
         if (vacancy == null) {
             return Map.of("status", "error", "message", "Vacancy not found");
@@ -44,7 +44,7 @@ public class DeleteVacancyCommand implements Command {
             return Map.of("status", "error", "message", "You can only delete your own vacancies");
         }
 
-        vacancyRepository.delete(vacancy);
+        vacancyService.deleteVacancyByVacancyId(vacancyId);
         return Map.of("status", "success");
     }
 }

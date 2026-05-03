@@ -2,6 +2,7 @@ package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.Security.JwtUtil;
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import com.courseproject.cvbuilderbackendv2.dto.ResumeDTO;
 import com.courseproject.cvbuilderbackendv2.entity.Resume;
 import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
@@ -36,6 +37,17 @@ public class LoadMyResumesCommand implements Command {
 
         int userId = userService.findUserId(userName);
         List<Resume> resumes = resumeService.findResumesByUserId(userId);
-        return Map.of("resumes", resumes);
+
+        List<ResumeDTO> resumeDTOs = resumes.stream()
+                .map(resume -> new ResumeDTO(
+                        resume.getResumeId(),
+                        resume.getUser().getUserId(),
+                        resume.getUser().getUserName(),
+                        resume.getResumeData(),
+                        resume.isPublic()
+                ))
+                .toList();
+
+        return Map.of("resumes", resumeDTOs);
     }
 }
