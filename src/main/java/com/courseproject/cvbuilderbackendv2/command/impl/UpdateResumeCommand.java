@@ -1,26 +1,35 @@
 package com.courseproject.cvbuilderbackendv2.command.impl;
 
 import com.courseproject.cvbuilderbackendv2.command.Command;
+import com.courseproject.cvbuilderbackendv2.command.CommandHistory;
+import com.courseproject.cvbuilderbackendv2.command.CommandMemento;
 import com.courseproject.cvbuilderbackendv2.entity.Resume;
 import com.courseproject.cvbuilderbackendv2.entity.Role;
 import com.courseproject.cvbuilderbackendv2.entity.User;
+import com.courseproject.cvbuilderbackendv2.service.EventService;
 import com.courseproject.cvbuilderbackendv2.service.ResumeService;
 import com.courseproject.cvbuilderbackendv2.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class UpdateResumeCommand implements Command {
     private final ResumeService resumeService;
     private final UserService userService;
+    private final EventService eventService;
+    private final CommandHistory commandHistory;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public UpdateResumeCommand(ResumeService resumeService, UserService userService) {
+    public UpdateResumeCommand(ResumeService resumeService, UserService userService,
+                               EventService eventService, CommandHistory commandHistory) {
         this.resumeService = resumeService;
         this.userService = userService;
+        this.eventService = eventService;
+        this.commandHistory = commandHistory;
     }
 
     @Override
@@ -46,9 +55,22 @@ public class UpdateResumeCommand implements Command {
             return Map.of("status", "error", "message", "You can only update your own resumes");
         }
 
+        Map<String, Object> undoParams = new HashMap<>();
+        undoParams.put("resumeId", resumeId);
+        undoParams.put("resumeData", resume.getResumeData().deepCopy());
+        undoParams.put("isPublic", resume.isPublic());
+
         JsonNode resumeData = objectMapper.valueToTree(params.get("resumeData"));
         boolean isPublic = params.containsKey("isPublic") && Boolean.parseBoolean(params.get("isPublic").toString());
         boolean updated = resumeService.updateResume(resumeId, resumeData, isPublic);
+
+        if (updated) {
+            boolean isUndoRedo = Boolean.TRUE.equals(params.get("_isUndoRedo"));
+            if (!isUndoRedo) {
+                eventService.saveResumeEvent(resumeId, "UPDATED", resumeData.toString(), userName);
+                commandHistory.pushUndo(userName, new CommandMemento("UPDATERESUMECOMMAND", undoParams));
+            }
+        }
 
         return Map.of("status", updated ? "success" : "error");
     }
